@@ -1,40 +1,44 @@
-import { productsArray } from "../productStore";
+import { CartContext } from "../CartContext";
+import { useContext } from "react";
 
-function Product() {
+function Product(props) {
+  const product = props.product;
+  const cart = useContext(CartContext);
+  const productQuantity = cart.getProductQuantity(product.id);
+  console.log(cart.items);
+
+
   return (
     <>
-      <h1 className="text-3xl text-center font-bold underline mb-10">
-        Products
-      </h1>
+      <h3 className="text-2xl mb-2 font-bold"> {product.title} </h3>
+      <p className="text-xl mb-2">{product.price}</p>
+      {productQuantity > 0 ?
+        <>
+          <div className="flex justify-between">
 
-      <div className="flex justify-around">
-        {productsArray.map((product, idx) => (
-          <div className="text-center bg-white rounded-lg px-20 py-8 ring-1 ring-slate-300/5 shadow-xl" key={idx}>
-            <h3 className="text-2xl mb-2 font-bold"> {product.title} </h3>
-            <p className="text-xl mb-2">{product.price}</p>
-            <div className="flex justify-between">
-              <div className="text-xl mb-2 py-2">
-                In cart 3
-              </div>
-              <div className="mb-1 pb-4">
-                <button className="text-2xl bg-blue-500 hover:bg-blue-700 px-2 py-2 mx-2 rounded-lg text-white">+</button>
-                <button className="text-2xl font-bold bg-blue-500 hover:bg-blue-700 px-3 py-2 rounded-lg text-white">-</button>
-              </div>
+            <div
+              className="text-xl mb-2 py-2"
+            >
+              In cart: {productQuantity}
             </div>
-            <button className="text-xl bg-blue-500 hover:bg-blue-700 px-3 py-2 rounded-lg text-white">
-              Add to Cart
-            </button>
-            <br />
-            <button className="text-xl bg-red-500 hover:bg-red-700 px-3 py-2 rounded-lg text-white">
-              Remove from cart
-            </button>
+            <div className="mb-1 pb-4">
+              <button className="text-2xl bg-blue-500 hover:bg-blue-700 px-2 py-2 mx-2 rounded-lg text-white"
+                onClick={() => cart.addOneToCart(product.id)}
+              >+</button>
+              <button className="text-2xl font-bold bg-blue-500 hover:bg-blue-700 px-3 py-2 rounded-lg text-white"
+                onClick={() => cart.removeOneFromCart(product.id)}
+              >-</button>
+            </div>
           </div>
-        ))}
-
-      </div>
-      <br />
-      <hr />
-
+          <button className="text-xl bg-red-500 hover:bg-red-700 px-3 py-2 rounded-lg text-white" onClick={() => cart.deleteFromCart(product.id)}>
+          Remove to Cart
+        </button>
+        </>
+        :
+        <button className="text-xl bg-blue-500 hover:bg-blue-700 px-3 py-2 rounded-lg text-white" onClick={() => cart.addOneToCart(product.id)}>
+          Add to Cart
+        </button>
+      }
     </>
   )
 }

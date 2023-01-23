@@ -1,5 +1,5 @@
-import { useState, Fragment, useContext } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
+import { useState, Fragment, useContext } from 'react';
 import { CartContext } from "../CartContext";
 import CartProduct from './CartProduct';
 
@@ -12,10 +12,10 @@ function Navbar() {
   function closeModal() {
     setIsOpen(false)
   }
-
   function openModal() {
     setIsOpen(true)
   }
+
   //stripe
   const checkout = async () => {
     await fetch('http://localhost:4000/checkout', {
@@ -39,7 +39,7 @@ function Navbar() {
     <>
       <div className="text-3xl text-center flex justify-between mx-20 mb-5 mt-5">
         <div className="font-bold">
-          Ecommerce Store
+          NS Store
         </div>
         <div>
           <button
@@ -76,17 +76,28 @@ function Navbar() {
                   leaveTo="opacity-0 scale-95"
                 >
                   <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                   <div className='flex justify-between mb-5'>
                     <Dialog.Title
                       as="h3"
-                      className="text-lg font-bold leading-6 text-gray-900"
+                      className="text-2xl font-extrabold leading-6 text-gray-900"
                     >
                       Shopping Cart
                     </Dialog.Title>
-                    <div className="mt-2">
+                    <button
+                        type="button"
+                        className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                        onClick={closeModal}
+                      >
+                        Close
+                      </button>
+                    </div>
+                    <div>
                       {/* function get data from product card then display to checkout cart items */}
                       {productsCount > 0 ?
                         <>
-                          <p className="text-sm text-gray-500">
+                         
+                          <hr />
+                          <p className="text-sm text-gray-500 mb-2">
                             Detail purchase
                           </p>
                           {cart.items.map((currentProduct, idx) => (
@@ -95,27 +106,18 @@ function Navbar() {
 
                           ))}
 
-                          <h1>Total: {cart.getTotalCost().toFixed(3)}</h1>
+                          <h1 className='text-2xl font-bold'>Total: ${cart.getTotalCost().toFixed(3)}</h1>
 
                           {/* Stripe */}
-                          <button className="text-xl bg-green-500 hover:bg-green-700 px-3 py-2 rounded-lg text-white" onClick={checkout}>
-                            Purchase Items!
-                          </button>
-
+                          
+                          <h1 className="text-center text-xl cursor-pointer bg-green-500 hover:bg-green-700 px-3 py-2 rounded-lg text-white mt-1" onClick={checkout}>
+                            Purchase now
+                          </h1>
+                             
                         </>
                         :
                         <h1>There are no items in your cart.</h1>
                       }
-                    </div>
-
-                    <div className="mt-4">
-                      <button
-                        type="button"
-                        className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                        onClick={closeModal}
-                      >
-                        Got it, thanks!
-                      </button>
                     </div>
                   </Dialog.Panel>
                 </Transition.Child>
@@ -123,8 +125,6 @@ function Navbar() {
             </div>
           </Dialog>
         </Transition>
-
-
       </div>
     </>
   )
